@@ -30,6 +30,7 @@ Escoja una opción:
 """)
     
     opcion = int(input("Ingrese la opción: "))
+    
     if opcion == 1:
         
         for prod in catalogo:
@@ -57,6 +58,7 @@ Escoja una opción:
                     
             if cantidad <= 0:
                 print("La cantidad debe ser mayor a 0")
+                
             elif cantidad > producto_encontrado["stock"]:
                 print(f"No hay suficiente en stock. Disponible: {producto_encontrado['stock']}")
             else:
@@ -76,3 +78,26 @@ Escoja una opción:
             volver = input("\nIngrese 9 para regresar al menú principal: ")
             if volver == "9":
                 break   
+    
+    elif opcion == 3:
+        
+        if not carrito:
+            print("El carrito está vacío ")
+        
+        else: 
+            print("\n---Carrito de compras---")
+            total=0
+            
+            for car in carrito:
+                subtotal = car["precio"] * car["cantidad"]
+                total += subtotal
+                print(f"{car['nombre']} - ${car['precio']} x {car['cantidad']} = ${subtotal:.2f}")
+            
+            print(f"\nTotal: ${total:.2f}")
+        
+        while True:
+            volver = input("\nIngrese 9 para regresar al menú principal: ")
+            if volver == "9":
+                break  
+    
+    
