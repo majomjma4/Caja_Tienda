@@ -30,3 +30,17 @@ Escoja una opción:
 
 opcion = int(input("Ingrese la opción: "))
 
+if opcion == 1:
+    
+    for prod in catalogo:
+        print(f"\n{prod['codigo']} | {prod['nombre']} |  {prod['precio']} | {prod['stock']}")
+        
+    print("""\nEscoja una opción: \n
+        2. Agregar al carrito
+        3. Ver carrito
+        4. finalizar compra
+        0. Salir
+            """)
+    
+    opcion = int(input("Ingrese la opción: "))
+
