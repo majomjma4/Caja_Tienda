@@ -102,49 +102,56 @@ Escoja una opción:
     
     elif opcion == 4:
         
-        if not carrito:
-            print("El carrito está vacío")
+        compra= input("Desea finalizar la compra (si/no): ")
         
+        if compra == 'si':
+        
+            if not carrito:
+                print("\nEl carrito está vacío")
+            
+            else:
+                print("\n========== FACTURA ==========")
+                print(f"{'Producto':<15}{'cant.':<6}{'Precio':<10}{'Subtotal':<10}")
+                print("-"*45)
+                
+                total = 0
+                
+                for car in carrito:
+                    subtotal = car["precio"] * car["cantidad"]
+                    total += subtotal
+                    print(f"{car['nombre']:<15}{car['cantidad']:<6}{car['precio']:<9.2f}${subtotal:<9.2f}")
+                    
+                if total > 50:
+                    descuento = 0.10
+                elif total > 20:
+                    descuento = 0.05
+                else:
+                    descuento = 0
+                    
+                total_con_descuento = total * (1-descuento)
+                iva = total_con_descuento * 0.15
+                total_final = total_con_descuento + iva
+                
+                print("-"*45)
+                print(f"{'Total sin descuento: ':<30}${total:.2f}")
+                if descuento > 0:
+                    print(f"{'Descuento aplicado: ':<30}{int(descuento*100)}%")
+                    print(f"{'Total con descuento: ':<30}${total_con_descuento:.2f}")
+            
+                else:
+                    print(f"{'No aplica descuento':<30}")
+                    
+                print(f"{'IVA 15%:':<30}${iva:.2f}")
+                print(f"{'TOTAL A PAGAR:':<30}${total_final:.2f}")
+                print("==============================\n")
+         
         else:
-            print("\n========== FACTURA ==========")
-            print(f"{'Producto':<15}{'cant.':<6}{'Precio':<10}{'Subtotal':<10}")
-            print("-"*45)
-            
-            total = 0
-            
-            for car in carrito:
-                subtotal = car["precio"] * car["cantidad"]
-                total += subtotal
-                print(f"{car['nombre']:<15}{car['cantidad']:<6}{car['precio']:<9.2f}${subtotal:<9.2f}")
-                
-            if total > 50:
-                descuento = 0.10
-            elif total > 20:
-                descuento = 0.05
-            else:
-                descuento = 0
-                
-            total_con_descuento = total * (1-descuento)
-            iva = total_con_descuento * 0.15
-            total_final = total_con_descuento + iva
-            
-            print("-"*45)
-            print(f"{'Total sin descuento: ':<30}${total:.2f}")
-            if descuento > 0:
-                print(f"{'Descuento aplicado: ':<30}{int(descuento*100)}%")
-                print(f"{'Total con descuento: ':<30}${total_con_descuento:.2f}")
-           
-            else:
-                print(f"{'No aplica descuento':<30}")
-                
-            print(f"{'IVA 15%:':<30}${iva:.2f}")
-            print(f"{'TOTAL A PAGAR:':<30}${total_final:.2f}")
-            print("==============================\n")
-            
-        while True:
-            volver = input("\nIngrese 9 para regresar al menú principal: ")
-            if volver == "9":
-                break
+            print("compra cancelada")
+               
+            while True:
+                volver = input("\nIngrese 9 para regresar al menú principal: ")
+                if volver == "9":
+                    break
             
    
             
