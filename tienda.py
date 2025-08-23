@@ -152,7 +152,16 @@ Escoja una opción:
                 volver = input("\nIngrese 9 para regresar al menú principal: ")
                 if volver == "9":
                     break
-            
-   
-            
+    
+    elif opcion == 0:    
+        
+        print("\n ¡Ha salido con exito! \n ")   
+        carrito.clear()
+        
+        continue
+        
+    else:
+        print("¡Error, Ingrese una opción valida!\n") 
+        
+        continue           
             
