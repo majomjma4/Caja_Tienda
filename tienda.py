@@ -4,7 +4,7 @@ carrito = []
 
 def agg_prod (codigo, nombre, precio, stock):
     producto = {
-        "codigo": codigo,
+        "codigo": codigo.strip().upper(),
         "nombre": nombre,
         "precio": precio,
         "stock": stock
@@ -20,98 +20,94 @@ agg_prod("P006", "Jugo", 0.50, 100)
 
 
 while True:
-    print("""---Bienvenido---
-Escoja una opción:
+    print("""
+\nEscoja una opción:
 1. Ver catálogo
 2. Agregar al carrito
 3. Ver carrito
 4. finalizar compra
 0. Salir
-""")
+\n""")
     
-    opcion = int(input("Ingrese la opción: "))
+    try:
+        opcion = int(input("\nIngrese la opción: "))
+        
+    except ValueError:
+        print("Ingrese un número válido")
+        continue
     
-    if opcion == 1:
-        
-        for prod in catalogo:
-            print(f"\n{prod['codigo']} | {prod['nombre']} |  {prod['precio']} | {prod['stock']}")
+    match opcion:
+        case 1:
             
-        while True:
-            volver = input("\nIngrese 9 para regresar al menú principal: ")
-            if volver == "9":
-                break
+            print("\n---Catálogo---")
+            for prod in catalogo:
+                print(f"\n{prod['codigo']} | {prod['nombre']} |  {prod['precio']} | {prod['stock']}\n")
             
-        
-    elif opcion == 2:
+          
+        case 2:
             
-        codigo_buscar = input("Agrege el codigo del producto que desea agregar: ").upper()
-            
-        producto_encontrado = None
-            
-        for prod in catalogo:
-            if prod["codigo"] == codigo_buscar:
-                producto_encontrado = prod
-                break
-            
-        if producto_encontrado:
-            cantidad = int(input("Ingrese la cantidad: "))
-                    
-            if cantidad <= 0:
-                print("La cantidad debe ser mayor a 0")
+            codigo_buscar = input("\nAgrege el codigo del producto que desea agregar: ").strip().upper()
                 
-            elif cantidad > producto_encontrado["stock"]:
-                print(f"No hay suficiente en stock. Disponible: {producto_encontrado['stock']}")
-            else:
-                carrito.append({
-                    "codigo": producto_encontrado["codigo"],
-                    "nombre": producto_encontrado["nombre"],
-                    "precio": producto_encontrado["precio"],
-                    "cantidad": cantidad
-                })
-                producto_encontrado["stock"] -= cantidad
-                print(f"{cantidad} unidades de {producto_encontrado['nombre']} se agregaron al carrito")
-        
-        else: 
-            print("Producto no encontrado ")  
+            producto_encontrado = None
             
-        while True:
-            volver = input("\nIngrese 9 para regresar al menú principal: ")
-            if volver == "9":
-                break   
+            for prod in catalogo:
+                if prod["codigo"] == codigo_buscar:
+                    producto_encontrado = prod
+                    break
+                
+            if producto_encontrado:
+                try:
+                    
+                    cantidad = int(input("\nIngrese la cantidad: "))
+                except ValueError:
+                    print("\nCantidad inválida")
+                    continue
+                    
+                if cantidad <= 0:
+                    print("\nLa cantidad debe ser mayor a 0")
+                    
+                elif cantidad > producto_encontrado["stock"]:
+                    print(f"\nNo hay suficiente en stock. Disponible: {producto_encontrado['stock']}")
+                else:
+                    carrito.append({
+                        "codigo": producto_encontrado["codigo"],
+                        "nombre": producto_encontrado["nombre"],
+                        "precio": producto_encontrado["precio"],
+                        "cantidad": cantidad
+                    })
+                    producto_encontrado["stock"] -= cantidad
+                    print(f"{cantidad} unidades de {producto_encontrado['nombre']} se agregaron al carrito\n")
+            
+            else: 
+                print("\nProducto no encontrado ")  
+ 
     
-    elif opcion == 3:
-        
-        if not carrito:
-            print("El carrito está vacío")
-        
-        else: 
-            print("\n---Carrito de compras---")
-            total=0
-            
-            for car in carrito:
-                subtotal = car["precio"] * car["cantidad"]
-                total += subtotal
-                print(f"{car['nombre']} - ${car['precio']} x {car['cantidad']} = ${subtotal:.2f}")
-            
-            print(f"\nTotal: ${total:.2f}")
-        
-        while True:
-            volver = input("\nIngrese 9 para regresar al menú principal: ")
-            if volver == "9":
-                break
-    
-    elif opcion == 4:
-        
-        compra= input("Desea finalizar la compra (si/no): ")
-        
-        if compra == 'si':
+        case 3:
         
             if not carrito:
                 print("\nEl carrito está vacío")
             
-            else:
-                print("\n========== FACTURA ==========")
-                print(f"{'Producto':<15}{'cant.':<6}{'Precio':<10}{'Subtotal':<10}")
+            else: 
+                print("\n---Carrito de compras---")
+                total=0
+                
+                for car in carrito:
+                    subtotal = car["precio"] * car["cantidad"]
+                    total += subtotal
+                    print(f"{car['nombre']} - ${car['precio']} x {car['cantidad']} = ${subtotal:.2f}\n")
+                
+                print(f"\nTotal: ${total:.2f}")
+            
+        case 4:
+            if not carrito:
+                print("\nEl carrito está vacío")
+                continue
+        
+            compra= input("\nDesea finalizar la compra (si/no): ")
+            if compra == 'si':
+
+                print("\n================== FACTURA ==================")
+                print(f"{'Producto':<15}{'cant.':<6}{'Precio':<10}{'Subtotal':<10}\n")
                 print("-"*45)
                 
                 total = 0
@@ -136,32 +132,23 @@ Escoja una opción:
                 print(f"{'Total sin descuento: ':<30}${total:.2f}")
                 if descuento > 0:
                     print(f"{'Descuento aplicado: ':<30}{int(descuento*100)}%")
-                    print(f"{'Total con descuento: ':<30}${total_con_descuento:.2f}")
-            
-                else:
-                    print(f"{'No aplica descuento':<30}")
-                    
+                    print(f"{'Total con descuento: ':<30}${total_con_descuento:.2f}")   
                 print(f"{'IVA 15%:':<30}${iva:.2f}")
                 print(f"{'TOTAL A PAGAR:':<30}${total_final:.2f}")
-                print("==============================\n")
+                print("===============================================\n")
          
-        else:
-            print("compra cancelada")
+            else:
+                print("compra cancelada")
                
-            while True:
-                volver = input("\nIngrese 9 para regresar al menú principal: ")
-                if volver == "9":
-                    break
-    
-    elif opcion == 0:    
-        
-        print("\n ¡Ha salido con exito! \n ")   
-        carrito.clear()
-        
-        continue
-        
-    else:
-        print("¡Error, Ingrese una opción valida!\n") 
-        
-        continue           
+        case 0:    
+                
+            print("\n ¡Gracias por su compra! Hasta luego. \n ")   
+            carrito.clear()
+                
+            continue
+                
+        case _:
+            print("¡Error, Opción inválida    \n") 
+                
+                       
             
